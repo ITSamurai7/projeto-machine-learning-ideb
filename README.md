@@ -16,7 +16,8 @@ Este módulo foca na **Análise Exploratória de Dados (EDA)**.
 2. Instale as dependências necessárias executando:
    ```bash
    pip install -r requirements.txt
-2.5. É recomendado ter o Python instalado.
+2.5 É recomendado ter o Python instalado.
+
 3. Abra e execute o notebook `1_analise_exploratoria_evasao.ipynb`.
 
 ### ⚠️ Atenção aos Dados: O notebook está configurado para ler a base ideb_ensino_medio.csv a partir do Google Drive.
