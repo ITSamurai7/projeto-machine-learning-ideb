@@ -2,51 +2,17 @@
 
 Previsão de risco de evasão escolar no Ensino Médio utilizando Machine Learning. Análise baseada nos microdados do IDEB/INEP (via Base dos Dados) para identificar fatores críticos de abandono e apoiar ações preventivas em escolas.
 
-## 📊 Módulo Atual: Análise de Dados (`feature/analise`)
-Este módulo foca na **Análise Exploratória de Dados (EDA)**. 
-**Sobre os Dados:** Esta análise utiliza a base `ideb_ensino_medio.csv`, que contém os indicadores e métricas do Índice de Desenvolvimento da Educação Básica (IDEB) direcionados ao Ensino Médio, permitindo avaliar o desempenho escolar e identificar fatores de risco de evasão.
+## 📊 Marco 1: Fluxo Consolidado (Dados, Pré-processamento e Baseline)
+Este módulo contém a esteira completa inicial de dados, preparando o terreno para a modelagem preditiva avançada. O arquivo principal é o `01_fluxo_marco1_consolidado.ipynb`.
 
-**O que foi feito nesta etapa:**
-- Extração e carregamento dos microdados.
-- Limpeza e tratamento inicial das bases.
-- Visualização de variáveis e identificação de fatores preliminares que influenciam a evasão.
+**O que foi desenvolvido nesta etapa:**
+- **Parte 1 (Análise Exploratória):** Extração, limpeza inicial, criação da variável alvo (`alerta_risco`), visualização de distribuições, correlações e diagnóstico rigoroso de outliers (Regra de Tukey).
+- **Parte 2 (Pré-processamento):** Documentação (Ficha Técnica), tratamento justificado de valores nulos (Tabela de Descartes), codificação de variáveis categóricas (`Dummy Variables`) e padronização de escalas (`StandardScaler`).
+- **Parte 3 (Protocolo e Baseline):** Divisão dos dados em Treino (70%), Validação (15%) e Teste (15%) com `random_state=42` estrito (sem vazamento). Execução de um modelo de referência (Regressão Logística) avaliado prioritariamente pela métrica de **Revocação (Recall)**, visando minimizar os falsos negativos no contexto de evasão escolar.
 
-## 🚀 Como executar a análise?
+## 🚀 Como executar o projeto?
+
 1. Clone este repositório para a sua máquina ou abra o notebook diretamente no Google Colab.
-2. Instale as dependências necessárias executando:
+2. Instale as dependências necessárias executando o comando abaixo no seu terminal:
    ```bash
    pip install -r requirements.txt
-   
-2.5 É recomendado ter o Python instalado.
-
-3. Abra e execute o notebook `1_analise_exploratoria_evasao.ipynb`.
-
-### ⚠️ Atenção aos Dados: O notebook está configurado para ler a base ideb_ensino_medio.csv a partir do Google Drive.
-
-Se for rodar no Colab, faça o upload do arquivo ideb_ensino_medio.csv (disponível neste repositório) para a sua pasta no Drive e verifique se o caminho no código corresponde ao seu:
-CAMINHO = '/content/drive/MyDrive/machine_learning/ideb_ensino_medio.csv'
-
-Alternativamente, altere a variável CAMINHO no código para ler o arquivo localmente.
-
-Execute as células do arquivo 1_analise_exploratoria_evasao.ipynb.
-
-
-----------------------------------------------------------------------
-# 🚫 (2)PRÉ-PROCESSAMENTO SERÁ ADICIONADO SOMENTE SE SUA BRENCH ESTIVER COMPLETA COM SEUS REQUISITOS FEITOS POR COMPLETO, TENDO A CONEXÃO QUE FAZ PONTE DA (1)ANÁLISE DE DADOS ATÉ (3)PROTOCOLO EXPERIMENTLA E BASELINE 
-
-
-## 🧪 Módulo: Protocolo Experimental e Baseline
-Este módulo define **como os modelos serão avaliados** (protocolo experimental) e executa um **modelo de referência (baseline)** para prever o risco dos municípios, usando como métrica o recall da classe Alto Risco, justificado pelo custo do erro no domínio.
-
-**O que foi feito nesta etapa:**
-- **Preparação da base:** remoção dos registros com nota de Matemática ou rendimento ausentes (3.848 registros, 13,9%), pois a regra do alvo não pode ser avaliada neles. Restaram 23.921 registros, com 20,9% de Alto Risco.
-- **Seleção de variáveis sem vazamento de dados:** ficam de fora as colunas que definem o alvo ou derivam dele (nota de Matemática, rendimento, aprovação, IDEB), as de valor único e os identificadores. Dois cenários foram avaliados:
-  - **A (só contexto):** `ano`, `sigla_uf` e `populacao`.
-  - **B (+ português):** o cenário A mais a nota de Língua Portuguesa, que funciona como limite superior de desempenho por ser muito correlacionada com a nota de Matemática.
-- **Divisão treino/teste (80/20):** estratificada pelo alvo e **agrupada por município**, para que nenhum município apareça nos dois conjuntos. Semente fixa (`SEMENTE = 42`) para reprodutibilidade.
-- **Métrica:** recall da classe Alto Risco (principal), com precisão, F2 e PR-AUC de apoio. Deixar de identificar um município em risco (falso negativo) é o erro mais custoso, e a acurácia foi descartada por causa do desbalanceamento das classes.
-- **Baseline:** regressão logística com ponderação de classes, comparada a um classificador trivial (sempre "Estável"). Validação cruzada de 5 folds no treino e avaliação final única no teste.
-
-- ## 🚀 Como executar o baseline?
-1. Execute primeiro as etapas da EDA, pois o baseline usa a base e a variável `alerta_risco` criadas nelas.
-2. Abra e execute o notebook `etapas-1_e_3_baseline.ipynb`, seguindo as células em ordem até a **Etapa 6** (seções 6.1 a 6.8).
